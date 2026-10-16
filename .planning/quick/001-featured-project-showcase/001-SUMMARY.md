@@ -34,9 +34,9 @@ Added an interactive, responsive featured project spotlight showcase banner at t
 ## Files Modified
 | File | Action | Description |
 |------|--------|-------------|
-| [index.html](file:///c:/Users/Lenovo/Downloads/sharan-professional-portfolio/index.html) | Modified | Added `.featured-spotlight` markup with 4 project slides and HUD displays |
-| [css/style.css](file:///c:/Users/Lenovo/Downloads/sharan-professional-portfolio/css/style.css) | Modified | Added HUD styles, radar scanner, forensic scan, macros gauge, and media queries |
-| [js/app.js](file:///c:/Users/Lenovo/Downloads/sharan-professional-portfolio/js/app.js) | Modified | Added `initFeaturedSpotlight()` carousel controller, touch swipe, biosecurity case study data, and modal hooks |
+| [index.html](../../../index.html) | Modified | Added `.featured-spotlight` markup with 4 project slides and HUD displays |
+| [css/style.css](../../../css/style.css) | Modified | Added HUD styles, radar scanner, forensic scan, macros gauge, and media queries |
+| [js/app.js](../../../js/app.js) | Modified | Added `initFeaturedSpotlight()` carousel controller, touch swipe, biosecurity case study data, and modal hooks |
 
 ## Verification
 - Executed DOM & content assertions via Python verifying `.featured-spotlight` and controller functions.
