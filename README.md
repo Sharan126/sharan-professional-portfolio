@@ -3,6 +3,11 @@
 > **"ENGINEERED TO IMAGINE. BUILT TO EXPLORE."**  
 > *Between Machines and Intelligence.*
 
+[![Live Site](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-00ff66?style=for-the-badge&logo=github&logoColor=0b0d10)](https://sharan126.github.io/sharan-professional-portfolio/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-12151c?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Sharan126/sharan-professional-portfolio)
+
+🔗 **Live Production URL**: [https://sharan126.github.io/sharan-professional-portfolio/](https://sharan126.github.io/sharan-professional-portfolio/)
+
 An extraordinary, interactive personal portfolio website for **Sharan M** — Mechanical Engineering student ('28 at Tontadarya College of Engineering, Karnataka, India) and full-stack AI builder.
 
 ---
