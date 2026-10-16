@@ -6,6 +6,10 @@
 (function () {
   'use strict';
 
+  // --- CROSS-COMPONENT CONTROLLER HOOKS ---
+  let pauseSpotlightAutoCycle = null;
+  let resumeSpotlightAutoCycle = null;
+
   // --- PROJECT CASE STUDIES DATA STORE ---
   const CASE_STUDIES = {
     macrosnap: {
@@ -386,12 +390,21 @@
     const counter = document.getElementById('spotlightCounter');
     const prevBtn = document.getElementById('spotlightPrevBtn');
     const nextBtn = document.getElementById('spotlightNextBtn');
+    const modal = document.getElementById('caseStudyModal');
 
     if (!slides.length) return;
 
     let currentIndex = 0;
     let timer = null;
+    let isHovered = false;
+    let isFocused = false;
     const totalSlides = slides.length;
+
+    function canAutoCycle() {
+      if (isHovered || isFocused) return false;
+      if (modal && modal.classList.contains('open')) return false;
+      return true;
+    }
 
     function goToSlide(index) {
       if (index < 0) index = totalSlides - 1;
@@ -425,6 +438,7 @@
 
     function startAutoCycle() {
       stopAutoCycle();
+      if (!canAutoCycle()) return;
       timer = setInterval(nextSlide, 7000);
     }
 
@@ -435,61 +449,86 @@
       }
     }
 
+    pauseSpotlightAutoCycle = stopAutoCycle;
+    resumeSpotlightAutoCycle = () => {
+      if (canAutoCycle()) startAutoCycle();
+    };
+
     tabBtns.forEach((btn, idx) => {
       btn.addEventListener('click', () => {
         goToSlide(idx);
-        startAutoCycle();
+        if (canAutoCycle()) startAutoCycle();
       });
     });
 
     if (nextBtn) {
       nextBtn.addEventListener('click', () => {
         nextSlide();
-        startAutoCycle();
+        if (canAutoCycle()) startAutoCycle();
       });
     }
 
     if (prevBtn) {
       prevBtn.addEventListener('click', () => {
         prevSlide();
-        startAutoCycle();
+        if (canAutoCycle()) startAutoCycle();
       });
     }
 
-    // Pause on hover or focus
-    spotlight.addEventListener('mouseenter', stopAutoCycle);
-    spotlight.addEventListener('mouseleave', startAutoCycle);
-    spotlight.addEventListener('focusin', stopAutoCycle);
-    spotlight.addEventListener('focusout', startAutoCycle);
+    // Pause on hover or focus; resume only when conditions permit
+    spotlight.addEventListener('mouseenter', () => {
+      isHovered = true;
+      stopAutoCycle();
+    });
+
+    spotlight.addEventListener('mouseleave', () => {
+      isHovered = false;
+      if (canAutoCycle()) startAutoCycle();
+    });
+
+    spotlight.addEventListener('focusin', () => {
+      isFocused = true;
+      stopAutoCycle();
+    });
+
+    spotlight.addEventListener('focusout', () => {
+      isFocused = false;
+      if (canAutoCycle()) startAutoCycle();
+    });
 
     // Keyboard navigation (Arrow keys when spotlight has focus)
     spotlight.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight') {
         nextSlide();
-        startAutoCycle();
+        if (canAutoCycle()) startAutoCycle();
       } else if (e.key === 'ArrowLeft') {
         prevSlide();
-        startAutoCycle();
+        if (canAutoCycle()) startAutoCycle();
       }
     });
 
-    // Touch swipe support for mobile
+    // Touch swipe support for mobile with 2D axis isolation
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchEndX = 0;
+    let touchEndY = 0;
 
     spotlight.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
       stopAutoCycle();
     }, { passive: true });
 
     spotlight.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
+      touchEndX = e.changedTouches[0].clientX;
+      touchEndY = e.changedTouches[0].clientY;
       const diffX = touchEndX - touchStartX;
-      if (Math.abs(diffX) > 40) {
+      const diffY = touchEndY - touchStartY;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
         if (diffX < 0) nextSlide();
         else prevSlide();
       }
-      startAutoCycle();
+      if (canAutoCycle()) startAutoCycle();
     }, { passive: true });
 
     startAutoCycle();
@@ -500,12 +539,16 @@
     const modal = document.getElementById('caseStudyModal');
     const closeBtn = document.getElementById('modalCloseBtn');
     const inspectBtns = document.querySelectorAll('.card-inspect-btn, .spotlight-inspect-btn');
+    const liveBtn = document.getElementById('modalLiveBtn');
+    const gitBtn = document.getElementById('modalGitBtn');
 
     if (!modal) return;
 
     function openModal(projectId) {
       const data = CASE_STUDIES[projectId];
       if (!data) return;
+
+      if (pauseSpotlightAutoCycle) pauseSpotlightAutoCycle();
 
       document.getElementById('modalBlueprintId').textContent = data.id;
       document.getElementById('modalTitle').textContent = data.title;
@@ -526,10 +569,20 @@
       });
 
       // Actions
-      const liveBtn = document.getElementById('modalLiveBtn');
-      const gitBtn = document.getElementById('modalGitBtn');
-      liveBtn.href = data.liveUrl;
-      gitBtn.href = data.githubUrl;
+      if (liveBtn) {
+        liveBtn.href = data.liveUrl;
+        if (data.liveUrl && data.liveUrl.startsWith('#')) {
+          liveBtn.target = '_self';
+          liveBtn.removeAttribute('rel');
+        } else {
+          liveBtn.target = '_blank';
+          liveBtn.setAttribute('rel', 'noopener noreferrer');
+        }
+      }
+
+      if (gitBtn) {
+        gitBtn.href = data.githubUrl;
+      }
 
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -538,6 +591,16 @@
     function closeModal() {
       modal.classList.remove('open');
       document.body.style.overflow = '';
+      if (resumeSpotlightAutoCycle) resumeSpotlightAutoCycle();
+    }
+
+    if (liveBtn) {
+      liveBtn.addEventListener('click', () => {
+        const href = liveBtn.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          closeModal();
+        }
+      });
     }
 
     inspectBtns.forEach(btn => {
