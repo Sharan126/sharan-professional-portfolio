@@ -357,6 +357,329 @@
           </p>
         </div>
 
+        <!-- FEATURED INVENTIONS SPOTLIGHT SHOWCASE -->
+        <div class="featured-spotlight reveal" id="featuredSpotlight" aria-roledescription="carousel" aria-label="Featured Inventions Showcase">
+          <!-- Spotlight Header / Navigation Strip -->
+          <div class="spotlight-header">
+            <div class="spotlight-title-wrap">
+              <span class="spotlight-pulse-dot" aria-hidden="true"></span>
+              <span class="spotlight-badge-label">TOP INVENTIONS SPOTLIGHT</span>
+              <span class="spotlight-counter" id="spotlightCounter">01 / 04</span>
+            </div>
+            
+            <!-- Slide Selector Tabs / Nav Indicators -->
+            <div class="spotlight-controls" role="tablist" aria-label="Featured Projects Selection">
+              <button class="spotlight-tab-btn active" role="tab" aria-selected="true" data-slide="0" aria-label="Slide 1: Karnataka Biosecurity Network">
+                <span class="tab-num">01</span>
+                <span class="tab-name">BIOSECURITY</span>
+              </button>
+              <button class="spotlight-tab-btn" role="tab" aria-selected="false" data-slide="1" aria-label="Slide 2: DocuShield AI">
+                <span class="tab-num">02</span>
+                <span class="tab-name">DOCUSHIELD</span>
+              </button>
+              <button class="spotlight-tab-btn" role="tab" aria-selected="false" data-slide="2" aria-label="Slide 3: MacroSnap">
+                <span class="tab-num">03</span>
+                <span class="tab-name">MACROSNAP</span>
+              </button>
+              <button class="spotlight-tab-btn" role="tab" aria-selected="false" data-slide="3" aria-label="Slide 4: Mangaluru Dasara 2026">
+                <span class="tab-num">04</span>
+                <span class="tab-name">DASARA 3D</span>
+              </button>
+            </div>
+
+            <!-- Direction Arrows -->
+            <div class="spotlight-arrows" aria-label="Slide controls">
+              <button class="spotlight-arrow-btn" id="spotlightPrevBtn" aria-label="Previous Featured Project">←</button>
+              <button class="spotlight-arrow-btn" id="spotlightNextBtn" aria-label="Next Featured Project">→</button>
+            </div>
+          </div>
+
+          <!-- Spotlight Slides Track -->
+          <div class="spotlight-slides" id="spotlightSlides">
+            <!-- Slide 0: Karnataka Biosecurity Network -->
+            <article class="spotlight-slide active" role="tabpanel" data-slide-index="0" data-project="biosecurity" aria-label="Karnataka Biosecurity Network">
+              <div class="spotlight-content">
+                <div class="spotlight-meta">
+                  <span class="spotlight-tag">SYS-09 // BIOSECURITY_AI</span>
+                  <span class="spotlight-award-stamp">★ 1ST PLACE NATIONAL WINNER</span>
+                </div>
+                <h3 class="spotlight-project-title">Karnataka Biosecurity Network</h3>
+                <p class="spotlight-summary">
+                  National award-winning AI biosecurity and livestock health platform engineered for early epidemiological disease contagion detection, localized quarantine zoning, and direct rural farmer-to-veterinarian telemetry.
+                </p>
+                <div class="spotlight-specs-row">
+                  <div class="spec-metric">
+                    <span class="metric-key">DETECTION SPEED</span>
+                    <span class="metric-highlight">&lt; 350ms</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">JURY RECOGNITION</span>
+                    <span class="metric-highlight">1st Place · KLE Belagavi</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">DOMAIN CORE</span>
+                    <span class="metric-highlight">Physical Livestock Security</span>
+                  </div>
+                </div>
+                <div class="card-tags" style="margin-bottom:20px;">
+                  <span class="card-tag">Computer Vision</span>
+                  <span class="card-tag">Epidemiological ML</span>
+                  <span class="card-tag">Geo-Zoning</span>
+                  <span class="card-tag">FastAPI</span>
+                </div>
+                <div class="spotlight-actions">
+                  <button class="btn btn-primary btn-sm spotlight-inspect-btn" data-project="biosecurity">Inspect Architecture ↗</button>
+                  <a class="btn btn-secondary btn-sm" href="#achievements">View National Record ↗</a>
+                </div>
+              </div>
+              <div class="spotlight-visual">
+                <div class="spotlight-hud-display">
+                  <div class="hud-top-bar">
+                    <span class="mono hud-title">LIVE TELEMETRY // EPIDEMIC_SURVEILLANCE</span>
+                    <span class="hud-status-live">● ACTIVE</span>
+                  </div>
+                  <div class="hud-radar-scanner">
+                    <div class="hud-radar-sweep"></div>
+                    <div class="hud-radar-blip blip-1" title="Node 01: North Karnataka Corridor"></div>
+                    <div class="hud-radar-blip blip-2" title="Node 02: Veterinary Central"></div>
+                    <div class="hud-radar-blip blip-3" title="Node 03: Field Quarantine Station"></div>
+                  </div>
+                  <div class="hud-stats-grid">
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">MONITORED CLUSTERS</span>
+                      <span class="stat-val lime">24 ZONES</span>
+                    </div>
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">ANOMALY INDEX</span>
+                      <span class="stat-val cyan">0.03% NORMAL</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 1: DocuShield AI -->
+            <article class="spotlight-slide" role="tabpanel" data-slide-index="1" data-project="docushield" aria-label="DocuShield AI">
+              <div class="spotlight-content">
+                <div class="spotlight-meta">
+                  <span class="spotlight-tag">SYS-04 // SECURITY_FORENSICS</span>
+                  <span class="spotlight-award-stamp">🛡️ CANARA BANK FINALIST</span>
+                </div>
+                <h3 class="spotlight-project-title">DocuShield AI</h3>
+                <p class="spotlight-summary">
+                  Fintech underwriting forensics platform combining pixel-level copy-move tamper analysis, PDF EXIF metadata verification, OCR layout authenticity audits, and automated fraud scoring.
+                </p>
+                <div class="spotlight-specs-row">
+                  <div class="spec-metric">
+                    <span class="metric-key">TAMPER DETECTION</span>
+                    <span class="metric-highlight">Pixel Anomaly &lt; 0.01%</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">VERIFICATION LATENCY</span>
+                    <span class="metric-highlight">Real-time Multi-pass</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">COMPETITION</span>
+                    <span class="metric-highlight">Suraksha National Hackathon</span>
+                  </div>
+                </div>
+                <div class="card-tags" style="margin-bottom:20px;">
+                  <span class="card-tag">FastAPI</span>
+                  <span class="card-tag">Python</span>
+                  <span class="card-tag">Next.js</span>
+                  <span class="card-tag">Computer Vision</span>
+                </div>
+                <div class="spotlight-actions">
+                  <a class="btn btn-primary btn-sm" href="https://docu-shield-ai.vercel.app" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>
+                  <button class="btn btn-secondary btn-sm spotlight-inspect-btn" data-project="docushield">Inspect Architecture ↗</button>
+                  <a class="btn btn-secondary btn-sm" href="https://github.com/Sharan126/DocuShield_AI" target="_blank" rel="noopener noreferrer">Code ↗</a>
+                </div>
+              </div>
+              <div class="spotlight-visual">
+                <div class="spotlight-hud-display">
+                  <div class="hud-top-bar">
+                    <span class="mono hud-title">UNDERWRITING INTEGRITY // MULTI-SPECTRAL</span>
+                    <span class="hud-status-live" style="color:var(--cyan)">● SCAN COMPLETE</span>
+                  </div>
+                  <div class="hud-forensic-display">
+                    <div class="forensic-scan-line"></div>
+                    <div class="forensic-row">
+                      <span class="forensic-label">EXIF METADATA MATCH</span>
+                      <span class="forensic-badge pass">VERIFIED (100%)</span>
+                    </div>
+                    <div class="forensic-row">
+                      <span class="forensic-label">COPY-MOVE ARTIFACTS</span>
+                      <span class="forensic-badge pass">CLEAN (0.00%)</span>
+                    </div>
+                    <div class="forensic-row">
+                      <span class="forensic-label">SIGNATURE BOUNDING BOX</span>
+                      <span class="forensic-badge pass">AUTH CERTIFIED</span>
+                    </div>
+                  </div>
+                  <div class="hud-stats-grid">
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">DOCUMENT INTEGRITY</span>
+                      <span class="stat-val lime">99.8% TRUST</span>
+                    </div>
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">BACKEND API</span>
+                      <span class="stat-val cyan">FASTAPI DOCKER</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 2: MacroSnap -->
+            <article class="spotlight-slide" role="tabpanel" data-slide-index="2" data-project="macrosnap" aria-label="MacroSnap">
+              <div class="spotlight-content">
+                <div class="spotlight-meta">
+                  <span class="spotlight-tag">SYS-01 // MULTIMODAL_AI</span>
+                  <span class="spotlight-award-stamp">⚡ LIVE PRODUCTION APP</span>
+                </div>
+                <h3 class="spotlight-project-title">MacroSnap</h3>
+                <p class="spotlight-summary">
+                  Multimodal dietary intelligence assistant powered by Gemini 2.5 Flash Lite. Instantly extracts caloric metrics and macro profiles from meal photographs, maintains conversational memory, and dispatches automated summary emails.
+                </p>
+                <div class="spotlight-specs-row">
+                  <div class="spec-metric">
+                    <span class="metric-key">ENGINE</span>
+                    <span class="metric-highlight">Gemini 2.5 Flash Lite</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">MODALITY</span>
+                    <span class="metric-highlight">Vision + Chat + Email</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">RUNTIME</span>
+                    <span class="metric-highlight">Streamlit Cloud (Global)</span>
+                  </div>
+                </div>
+                <div class="card-tags" style="margin-bottom:20px;">
+                  <span class="card-tag">Python</span>
+                  <span class="card-tag">Streamlit</span>
+                  <span class="card-tag">Gemini Flash</span>
+                  <span class="card-tag">Multimodal AI</span>
+                </div>
+                <div class="spotlight-actions">
+                  <a class="btn btn-primary btn-sm" href="https://macrosnap-9nhkfrumfthntx8pxgkb2i.streamlit.app/" target="_blank" rel="noopener noreferrer">Launch Live App ↗</a>
+                  <button class="btn btn-secondary btn-sm spotlight-inspect-btn" data-project="macrosnap">Inspect Architecture ↗</button>
+                  <a class="btn btn-secondary btn-sm" href="https://github.com/Sharan126/MacroSnap" target="_blank" rel="noopener noreferrer">Code ↗</a>
+                </div>
+              </div>
+              <div class="spotlight-visual">
+                <div class="spotlight-hud-display">
+                  <div class="hud-top-bar">
+                    <span class="mono hud-title">DIETARY INFERENCE MATRIX // REAL-TIME</span>
+                    <span class="hud-status-live">● DEPLOYED</span>
+                  </div>
+                  <div class="hud-macros-preview">
+                    <div class="hud-calorie-circle">
+                      <span class="cal-val">580</span>
+                      <span class="cal-lbl">KCAL EST.</span>
+                    </div>
+                    <div class="hud-macro-bars">
+                      <div class="macro-bar-item">
+                        <div class="macro-bar-header">
+                          <span>PROTEIN</span>
+                          <span class="lime">38g</span>
+                        </div>
+                        <div class="macro-bar-track"><div class="macro-bar-fill" style="width:75%; background:var(--lime);"></div></div>
+                      </div>
+                      <div class="macro-bar-item">
+                        <div class="macro-bar-header">
+                          <span>CARBOHYDRATES</span>
+                          <span class="cyan">52g</span>
+                        </div>
+                        <div class="macro-bar-track"><div class="macro-bar-fill" style="width:60%; background:var(--cyan);"></div></div>
+                      </div>
+                      <div class="macro-bar-item">
+                        <div class="macro-bar-header">
+                          <span>HEALTHY FATS</span>
+                          <span class="amber">14g</span>
+                        </div>
+                        <div class="macro-bar-track"><div class="macro-bar-fill" style="width:35%; background:var(--amber);"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hud-stats-grid">
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">ANALYSIS TIME</span>
+                      <span class="stat-val lime">1.2 SEC</span>
+                    </div>
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">OUTPUT DISPATCH</span>
+                      <span class="stat-val cyan">SMTP VERIFIED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 3: Mangaluru Dasara 2026 -->
+            <article class="spotlight-slide" role="tabpanel" data-slide-index="3" data-project="dasara" aria-label="Mangaluru Dasara 2026">
+              <div class="spotlight-content">
+                <div class="spotlight-meta">
+                  <span class="spotlight-tag">SYS-02 // 3D_WEBGL_HERITAGE</span>
+                  <span class="spotlight-award-stamp">🏛 INTERACTIVE 3D VIRTUAL TOUR</span>
+                </div>
+                <h3 class="spotlight-project-title">Mangaluru Dasara 2026</h3>
+                <p class="spotlight-summary">
+                  Interactive browser-based 3D digital twin of Sri Gokarnanatha Kshetra offering spatial navigation, bilingual Kannada/English voice guidance, festival historical archives, and responsive WebGL rendering across mobile and desktop.
+                </p>
+                <div class="spotlight-specs-row">
+                  <div class="spec-metric">
+                    <span class="metric-key">RENDERING ENGINE</span>
+                    <span class="metric-highlight">WebGL / 60 FPS</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">NARRATION</span>
+                    <span class="metric-highlight">Bilingual (KN / EN)</span>
+                  </div>
+                  <div class="spec-metric">
+                    <span class="metric-key">ACCESSIBILITY</span>
+                    <span class="metric-highlight">Spatial Audio & Navigation</span>
+                  </div>
+                </div>
+                <div class="card-tags" style="margin-bottom:20px;">
+                  <span class="card-tag">WebGL</span>
+                  <span class="card-tag">Interactive 3D</span>
+                  <span class="card-tag">Web Audio</span>
+                  <span class="card-tag">Bilingual Narration</span>
+                </div>
+                <div class="spotlight-actions">
+                  <a class="btn btn-primary btn-sm" href="https://sharan126.github.io/Mangaluru-Dasara/" target="_blank" rel="noopener noreferrer">Launch 3D Tour ↗</a>
+                  <button class="btn btn-secondary btn-sm spotlight-inspect-btn" data-project="dasara">Inspect Architecture ↗</button>
+                  <a class="btn btn-secondary btn-sm" href="https://github.com/Sharan126/Mangaluru-Dasara" target="_blank" rel="noopener noreferrer">Code ↗</a>
+                </div>
+              </div>
+              <div class="spotlight-visual">
+                <div class="spotlight-hud-display">
+                  <div class="hud-top-bar">
+                    <span class="mono hud-title">SPATIAL 3D PIPELINE // TEMPLE MATRIX</span>
+                    <span class="hud-status-live" style="color:var(--lime)">● WEBGL 60FPS</span>
+                  </div>
+                  <div class="hud-3d-wireframe-preview">
+                    <div class="wireframe-temple-icon">🏛</div>
+                    <span class="mono" style="font-size:0.7rem; color:var(--cyan); letter-spacing:0.06em;">KUDROLI GOKARNANATHA KSHETRA</span>
+                    <span class="mono" style="font-size:0.6rem; color:var(--text-muted); margin-top:4px;">Proximity Audio · Architectural Nav Mesh</span>
+                  </div>
+                  <div class="hud-stats-grid">
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">ASSET OPTIMIZATION</span>
+                      <span class="stat-val lime">LOW POLY / FAST LOAD</span>
+                    </div>
+                    <div class="hud-stat-cell">
+                      <span class="stat-lbl">AUDIO ENGINE</span>
+                      <span class="stat-val cyan">SYNCHRONIZED WEB AUDIO</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
         <!-- Filter Bar -->
         <div class="projects-filter-bar reveal">
           <div class="filter-tabs" role="group" aria-label="Project category filters">

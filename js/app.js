@@ -111,6 +111,19 @@
       stack: ['Parametric CAD', 'Additive Manufacturing', 'Mechanical Tolerances', 'Rapid Prototyping'],
       liveUrl: 'https://sites.google.com/view/parametric-3d-printable-sharan/full-page-embed?authuser=1',
       githubUrl: 'https://sites.google.com/view/parametric-3d-printable-sharan/full-page-embed?authuser=1'
+    },
+    biosecurity: {
+      id: 'SYS-09 // BIOSECURITY_AI',
+      title: 'Karnataka Biosecurity Network',
+      tagline: 'AI-Powered Livestock Epidemic Surveillance & Farmer-Vet Telemetry Platform',
+      category: 'AI & Social Impact',
+      status: '1ST PLACE NATIONAL WINNER',
+      problem: 'Rural livestock farming communities face catastrophic regional disease contagions due to delayed early-symptom reporting and manual paper veterinary communication pipelines.',
+      concept: 'A real-time distributed epidemic intelligence network combining computer vision symptom screening, contagion radius simulation, and automated farmer-veterinarian biosecurity alerts.',
+      implementation: 'Engineered as a distributed bio-telemetry architecture with localized symptom classification models, disease contagion radius modeling, automated distress SMS/IVR dispatching, and regional quarantine zone mapping. Won 1st Place nationally at KLE Belagavi Hackathon 2026.',
+      stack: ['Computer Vision', 'Epidemiological ML', 'Geo-Zoning', 'FastAPI', 'Tele-Vet Network'],
+      liveUrl: '#achievements',
+      githubUrl: 'https://github.com/Sharan126'
     }
   };
 
@@ -173,6 +186,7 @@
     initNavigation();
     initScrollReveals();
     initWorkflowBoard();
+    initFeaturedSpotlight();
     initProjectFiltering();
     initCaseStudyModal();
     initSkillsTopology();
@@ -362,11 +376,130 @@
     });
   }
 
-  // 8. Project Deep-Dive Slide-Over Modal / Architecture Drawer
+  // 8. Featured Project Spotlight Showcase Carousel
+  function initFeaturedSpotlight() {
+    const spotlight = document.getElementById('featuredSpotlight');
+    if (!spotlight) return;
+
+    const slides = spotlight.querySelectorAll('.spotlight-slide');
+    const tabBtns = spotlight.querySelectorAll('.spotlight-tab-btn');
+    const counter = document.getElementById('spotlightCounter');
+    const prevBtn = document.getElementById('spotlightPrevBtn');
+    const nextBtn = document.getElementById('spotlightNextBtn');
+
+    if (!slides.length) return;
+
+    let currentIndex = 0;
+    let timer = null;
+    const totalSlides = slides.length;
+
+    function goToSlide(index) {
+      if (index < 0) index = totalSlides - 1;
+      if (index >= totalSlides) index = 0;
+      currentIndex = index;
+
+      slides.forEach((slide, i) => {
+        const isActive = i === currentIndex;
+        slide.classList.toggle('active', isActive);
+        slide.setAttribute('aria-hidden', String(!isActive));
+      });
+
+      tabBtns.forEach((btn, i) => {
+        const isActive = i === currentIndex;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', String(isActive));
+      });
+
+      if (counter) {
+        counter.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      }
+    }
+
+    function nextSlide() {
+      goToSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      goToSlide(currentIndex - 1);
+    }
+
+    function startAutoCycle() {
+      stopAutoCycle();
+      timer = setInterval(nextSlide, 7000);
+    }
+
+    function stopAutoCycle() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    tabBtns.forEach((btn, idx) => {
+      btn.addEventListener('click', () => {
+        goToSlide(idx);
+        startAutoCycle();
+      });
+    });
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        nextSlide();
+        startAutoCycle();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        prevSlide();
+        startAutoCycle();
+      });
+    }
+
+    // Pause on hover or focus
+    spotlight.addEventListener('mouseenter', stopAutoCycle);
+    spotlight.addEventListener('mouseleave', startAutoCycle);
+    spotlight.addEventListener('focusin', stopAutoCycle);
+    spotlight.addEventListener('focusout', startAutoCycle);
+
+    // Keyboard navigation (Arrow keys when spotlight has focus)
+    spotlight.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        nextSlide();
+        startAutoCycle();
+      } else if (e.key === 'ArrowLeft') {
+        prevSlide();
+        startAutoCycle();
+      }
+    });
+
+    // Touch swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    spotlight.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      stopAutoCycle();
+    }, { passive: true });
+
+    spotlight.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diffX = touchEndX - touchStartX;
+      if (Math.abs(diffX) > 40) {
+        if (diffX < 0) nextSlide();
+        else prevSlide();
+      }
+      startAutoCycle();
+    }, { passive: true });
+
+    startAutoCycle();
+  }
+
+  // 9. Project Deep-Dive Slide-Over Modal / Architecture Drawer
   function initCaseStudyModal() {
     const modal = document.getElementById('caseStudyModal');
     const closeBtn = document.getElementById('modalCloseBtn');
-    const inspectBtns = document.querySelectorAll('.card-inspect-btn');
+    const inspectBtns = document.querySelectorAll('.card-inspect-btn, .spotlight-inspect-btn');
 
     if (!modal) return;
 
@@ -410,8 +543,8 @@
     inspectBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const card = btn.closest('.project-card');
-        const projKey = card ? card.dataset.project : null;
+        const card = btn.closest('.project-card, .spotlight-slide');
+        const projKey = btn.dataset.project || (card ? card.dataset.project : null);
         if (projKey) openModal(projKey);
       });
     });
