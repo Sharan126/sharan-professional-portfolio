@@ -491,7 +491,10 @@
       stopAutoCycle();
     });
 
-    spotlight.addEventListener('focusout', () => {
+    spotlight.addEventListener('focusout', (e) => {
+      if (e.relatedTarget && spotlight.contains(e.relatedTarget)) {
+        return;
+      }
       isFocused = false;
       if (canAutoCycle()) startAutoCycle();
     });

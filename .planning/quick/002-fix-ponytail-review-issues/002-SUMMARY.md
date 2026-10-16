@@ -32,8 +32,8 @@ Resolved all five issues identified during the Ponytail code review of the featu
 ## Files Modified
 | File | Action | Description |
 |------|--------|-------------|
-| [js/app.js](file:///c:/Users/Lenovo/Downloads/sharan-professional-portfolio/js/app.js) | Modified | Added 2D touch axis isolation, pointer/focus tracking, modal lifecycle hooks, and internal anchor handling |
-| [css/style.css](file:///c:/Users/Lenovo/Downloads/sharan-professional-portfolio/css/style.css) | Modified | Replaced dead transitions with `@keyframes spotlightFadeIn` on `.spotlight-slide.active` |
+| [js/app.js](../../../js/app.js) | Modified | Added 2D touch axis isolation, pointer/focus tracking, modal lifecycle hooks, and internal anchor handling |
+| [css/style.css](../../../css/style.css) | Modified | Replaced dead transitions with `@keyframes spotlightFadeIn` on `.spotlight-slide.active` |
 
 ## Verification
 - Executed Node.js syntax verification (`node -c js/app.js`) confirming zero syntax errors.
