@@ -20,7 +20,7 @@ Addressed two review findings from the latest CodeRabbit review:
 | File | Action | Description |
 |------|--------|-------------|
 | [js/app.js](../../../js/app.js) | Modified | Added `e.relatedTarget` check to prevent focus transitions between spotlight child elements from clearing `isFocused` or restarting rotation |
-| [.planning/quick/002-fix-ponytail-review-issues/002-SUMMARY.md](../../002-fix-ponytail-review-issues/002-SUMMARY.md) | Modified | Replaced machine-specific file URLs with repository-relative paths |
+| [.planning/quick/002-fix-ponytail-review-issues/002-SUMMARY.md](../002-fix-ponytail-review-issues/002-SUMMARY.md) | Modified | Replaced machine-specific file URLs with repository-relative paths |
 
 ## Verification
 - **Syntax Check**: Executed `node -c js/app.js` with zero errors.
