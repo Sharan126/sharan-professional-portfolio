@@ -74,6 +74,46 @@ body {
   z-index: 1;
 }
 
+/* ==========================================================================
+   FULL-PORTFOLIO 3D LIVING WORLD BACKGROUND (THREEUI SYLVA)
+   ========================================================================== */
+#root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.shader-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shader-frame .landing-page-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+}
+
+.shader-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent !important;
+  pointer-events: none;
+}
+
 
 a {
   color: inherit;

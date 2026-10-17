@@ -30,7 +30,7 @@ export function Scene() {
       <LandingPageFrame
         backgroundCanvasSelector="#scene"
         title="Sylva — Into the living world"
-        sourceUrl="/landing-pages/inner-green-3d.html"
+        sourceUrl="./landing-pages/inner-green-3d.html"
       />
     </div>
   );
