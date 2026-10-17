@@ -177,10 +177,8 @@
       metalness: 0.05,
       roughness: 0.35
     });
-    const frontMat = new THREE.MeshStandardMaterial({
-      map: frontTex,
-      metalness: 0.04,
-      roughness: 0.30
+    const frontMat = new THREE.MeshBasicMaterial({
+      map: frontTex
     });
     const backMat = new THREE.MeshStandardMaterial({
       map: backTex,
@@ -291,7 +289,7 @@
       const photoH = 770;
 
       // Photo frame background & border
-      ctx.fillStyle = '#0f172a';
+      ctx.fillStyle = '#1e3a8a';
       ctx.beginPath();
       if (ctx.roundRect) {
         ctx.roundRect(photoX, photoY, photoW, photoH, 16);
@@ -309,7 +307,17 @@
           ctx.rect(photoX, photoY, photoW, photoH);
         }
         ctx.clip();
-        ctx.drawImage(profileImageObj, photoX, photoY - 20, photoW, photoH + 40);
+
+        // High-fidelity aspect ratio cover crop: preserves natural proportions without stretching
+        const nw = profileImageObj.naturalWidth || profileImageObj.width || 1024;
+        const nh = profileImageObj.naturalHeight || profileImageObj.height || 1024;
+        const scale = Math.max(photoW / nw, photoH / nh);
+        const sw = photoW / scale;
+        const sh = photoH / scale;
+        const sx = (nw - sw) / 2;
+        const sy = Math.max(0, (nh - sh) * 0.12);
+        ctx.drawImage(profileImageObj, sx, sy, sw, sh, photoX, photoY, photoW, photoH);
+
         ctx.restore();
       }
 
@@ -420,14 +428,21 @@
     const texture = new THREE.CanvasTexture(offCanvas);
     texture.generateMipmaps = true;
     texture.minFilter = THREE.LinearMipmapLinearFilter;
+    if (THREE.SRGBColorSpace) {
+      texture.colorSpace = THREE.SRGBColorSpace;
+    } else if (THREE.sRGBEncoding) {
+      texture.encoding = THREE.sRGBEncoding;
+    }
 
     let profileImageLoaded = false;
     const profileImageObj = new Image();
     profileImageObj.crossOrigin = 'anonymous';
-    profileImageObj.src = 'assets/sharan-profile.png';
+    // Use fresh cache query string to guarantee newly replaced photo loads instantly
+    profileImageObj.src = 'assets/sharan-profile.png?v=' + Date.now();
     profileImageObj.onload = () => {
       profileImageLoaded = true;
       draw();
+      texture.needsUpdate = true;
     };
 
     draw();
@@ -490,6 +505,11 @@
     const texture = new THREE.CanvasTexture(offCanvas);
     texture.generateMipmaps = true;
     texture.minFilter = THREE.LinearMipmapLinearFilter;
+    if (THREE.SRGBColorSpace) {
+      texture.colorSpace = THREE.SRGBColorSpace;
+    } else if (THREE.sRGBEncoding) {
+      texture.encoding = THREE.sRGBEncoding;
+    }
     return texture;
   }
 
