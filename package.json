@@ -1,0 +1,34 @@
+{
+  "name": "sharan-professional-portfolio",
+  "version": "1.0.0",
+  "description": "> **\"ENGINEERED TO IMAGINE. BUILT TO EXPLORE.\"**   > *Between Machines and Intelligence.*",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sharan126/sharan-professional-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Sharan126/sharan-professional-portfolio/issues"
+  },
+  "homepage": "https://github.com/Sharan126/sharan-professional-portfolio#readme",
+  "dependencies": {
+    "@designcodeio/threeui": "file:./vendor/threeui.tgz",
+    "@vitejs/plugin-react": "^6.1.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.186.1",
+    "vite": "^8.3.4"
+  }
+}

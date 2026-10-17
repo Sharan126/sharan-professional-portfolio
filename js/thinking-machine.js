@@ -420,6 +420,8 @@
   function setupEvents() {
     window.addEventListener('resize', updateSize, { passive: true });
 
+    let isHovered = false;
+
     // Pointer move for smooth parallax
     const pointerHandler = (e) => {
       const rect = canvas.getBoundingClientRect();

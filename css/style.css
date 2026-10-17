@@ -4,11 +4,11 @@
    ========================================================================== */
 
 :root {
-  --bg-deep: #070908;
-  --bg: #0b0f0c;
-  --bg-surface: #101512;
-  --bg-surface-elevated: #161e18;
-  --bg-glass: rgba(16, 21, 18, 0.78);
+  --bg-deep: rgba(7, 9, 8, 0.4);
+  --bg: rgba(11, 15, 12, 0.35);
+  --bg-surface: rgba(16, 21, 18, 0.72);
+  --bg-surface-elevated: rgba(22, 30, 24, 0.82);
+  --bg-glass: rgba(16, 21, 18, 0.75);
   --bg-glass-card: rgba(22, 30, 24, 0.65);
   
   --text-main: #f0f5ee;
@@ -52,7 +52,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 86px;
-  background-color: var(--bg-deep);
+  background-color: #1a1e19;
   color: var(--text-main);
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
@@ -61,16 +61,17 @@ html {
 }
 
 body {
-  background-color: var(--bg);
+  background-color: transparent;
   background-image: 
     radial-gradient(circle at 85% 5%, rgba(110, 231, 183, 0.045) 0%, transparent 40%),
     radial-gradient(circle at 10% 40%, rgba(214, 250, 119, 0.035) 0%, transparent 45%),
-    linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  z-index: 1;
 }
 
 
@@ -1463,6 +1464,8 @@ img, svg {
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--bg-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
