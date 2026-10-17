@@ -2274,10 +2274,11 @@ img, svg {
     margin-bottom: 36px;
   }
 
-  /* MOBILE HERO: Front Page Split with Image / 3D Assembly Aligned Right */
+  /* MOBILE HERO: Front Page Split with Image / 3D Assembly Aligned Right (no dead empty space) */
   .hero {
-    min-height: calc(100svh - 76px);
-    padding: 20px 0 32px;
+    min-height: unset;
+    height: auto;
+    padding: 20px 0 24px;
     align-items: flex-start;
   }
 
@@ -2394,7 +2395,9 @@ img, svg {
 
 @media (max-width: 480px) {
   .hero {
-    padding: 14px 0 24px;
+    min-height: unset;
+    height: auto;
+    padding: 14px 0 16px;
   }
 
   .hero-layout {
