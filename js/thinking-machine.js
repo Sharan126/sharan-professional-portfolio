@@ -406,8 +406,10 @@
     if (camera) {
       camera.aspect = width / height;
       // Responsive camera distance adjustments
-      if (width < 480) {
-        camera.position.z = 8.5;
+      if (width < 220) {
+        camera.position.z = 7.6;
+      } else if (width < 480) {
+        camera.position.z = 8.2;
       } else if (width < 768) {
         camera.position.z = 7.8;
       } else {
