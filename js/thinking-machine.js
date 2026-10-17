@@ -1,14 +1,16 @@
 /**
- * THE THINKING MACHINE — UNIFIED 3D MECHANICAL RING & PORTRAIT
- * Custom Three.js Experience: Mechanical Engineering meets Generative AI.
- * The 3D rotating mechanical ring and Sharan M's profile portrait form a single
- * physically connected, gyroscopically precessing 3D assembly.
+ * THE INVENTOR'S DIMENSION — 3D HANGING LANYARD ID BADGE
+ * Inspired by modern physical developer credentials & conference passes:
+ * - Hanging woven lanyard strap & metallic clip/carabiner
+ * - Acrylic badge holder with slot cutout
+ * - Crisp dual-sided ID credential with high-res portrait, gold microchip & barcode
+ * - Interactive 3D pendulum tilt & sway with holographic sheen
+ * - Seamless on both Laptop (Desktop) and Mobile screens
  */
 
 (function () {
   'use strict';
 
-  // Check if WebGL & Three.js are available
   if (typeof THREE === 'undefined') {
     console.warn('Three.js not loaded. Falling back to static view.');
     return;
@@ -20,21 +22,11 @@
   const container = canvas.parentElement;
   const deck = canvas.closest('.hero-visual-deck') || container;
 
-  // Scene setup
   let renderer, scene, camera;
-  let sculptureGroup, ringAssembly, mainRing, gearGroup, mountingGroup, portraitGroup;
-  let orbitalRing, particleSystem;
-  let pulseRings = [];
+  let lanyardGroup, cardAssembly;
   let mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+  let currentRot = { x: 0, y: 0, z: 0 };
   let animationFrameId;
-
-  // Active Machine Mode: 03 // CREATION
-  const CREATION_CONFIG = {
-    speed: 0.016,
-    ringExpansion: 1.0,
-    particleSpread: 1.45,
-    accentColor: 0xd6fa77
-  };
 
   function init() {
     try {
@@ -52,379 +44,487 @@
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     renderer.setPixelRatio(dpr);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.0;
 
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, (container.clientWidth || 450) / (container.clientHeight || 520), 0.1, 100);
-    camera.position.set(0, 0, 7.2);
+    camera = new THREE.PerspectiveCamera(40, (container.clientWidth || 340) / (container.clientHeight || 480), 0.1, 100);
+    camera.position.set(0, 0, 7.0);
 
     updateSize();
 
     // Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
     scene.add(ambientLight);
 
-    // Key front light for portrait clarity
-    const keyFrontLight = new THREE.DirectionalLight(0xffffff, 0.85);
-    keyFrontLight.position.set(0, 1, 7);
+    const keyFrontLight = new THREE.DirectionalLight(0xffffff, 0.95);
+    keyFrontLight.position.set(0, 1.5, 7.5);
     scene.add(keyFrontLight);
 
-    // Lime accent directional light for specular highlights on metal
-    const limeLight = new THREE.DirectionalLight(0xd6fa77, 1.6);
-    limeLight.position.set(6, 8, 4);
-    scene.add(limeLight);
+    const limeAccent = new THREE.DirectionalLight(0xd6fa77, 0.7);
+    limeAccent.position.set(4, 5, 3);
+    scene.add(limeAccent);
 
-    // Cyan rim light for dramatic edge depth
-    const cyanLight = new THREE.DirectionalLight(0x6ee7b7, 1.2);
-    cyanLight.position.set(-6, -4, -3);
-    scene.add(cyanLight);
-
-    // Root Group
-    sculptureGroup = new THREE.Group();
-    scene.add(sculptureGroup);
+    const cyanAccent = new THREE.DirectionalLight(0x6ee7b7, 0.5);
+    cyanAccent.position.set(-4, -3, -2);
+    scene.add(cyanAccent);
 
     // =========================================================================
-    // UNIFIED 3D ASSEMBLY: MECHANICAL RING + MOUNTING STRUTS + PORTRAIT FRAME
+    // HANGING ID CARD ASSEMBLY (Pivoting from the lanyard clip at top)
     // =========================================================================
-    ringAssembly = new THREE.Group();
-    sculptureGroup.add(ringAssembly);
+    lanyardGroup = new THREE.Group();
+    // Anchor position
+    lanyardGroup.position.set(0, 0.22, 0);
+    scene.add(lanyardGroup);
 
-    const ringRadius = 2.34;
-    const ringTube = 0.07;
-    const cardW = 2.30;
-    const cardH = 2.808;
-    const cardDepth = 0.12;
-
-    // 1. The Main Outer Titanium Ring
-    const ringGeo = new THREE.TorusGeometry(ringRadius, ringTube, 24, 120);
-    const ringMat = new THREE.MeshStandardMaterial({
-      color: 0x161e18,
-      metalness: 0.9,
-      roughness: 0.22
-    });
-    mainRing = new THREE.Mesh(ringGeo, ringMat);
-    mainRing.userData = { name: 'MECHANICAL_GIMBAL_A: TITANIUM_TORQUE_RING' };
-    ringAssembly.add(mainRing);
-
-    // 1b. Concentric Lime Luminous Inner Rim
-    const glowRimGeo = new THREE.TorusGeometry(ringRadius - 0.08, 0.012, 16, 120);
-    const glowRimMat = new THREE.MeshBasicMaterial({
-      color: 0xd6fa77,
-      transparent: true,
-      opacity: 0.65
-    });
-    const glowRim = new THREE.Mesh(glowRimGeo, glowRimMat);
-    mainRing.add(glowRim);
-
-    // 1c. Rotating Precision Gear Bezel (gears mounted along perimeter)
-    gearGroup = new THREE.Group();
-    const teethCount = 36;
-    const toothGeo = new THREE.BoxGeometry(0.06, 0.18, 0.07);
-    const toothMat = new THREE.MeshStandardMaterial({
-      color: 0xd6fa77,
-      metalness: 0.92,
-      roughness: 0.18
-    });
-    for (let i = 0; i < teethCount; i++) {
-      const angle = (i / teethCount) * Math.PI * 2;
-      const tooth = new THREE.Mesh(toothGeo, toothMat);
-      tooth.position.set(Math.cos(angle) * ringRadius, Math.sin(angle) * ringRadius, 0);
-      tooth.rotation.z = angle;
-      gearGroup.add(tooth);
-    }
-    mainRing.add(gearGroup);
-
-    // 2. The 3D Portrait Frame Assembly
-    portraitGroup = new THREE.Group();
-    ringAssembly.add(portraitGroup);
-
-    // 2a. Machined Titanium Chassis (Solid backing with metallic bevels)
-    const chassisGeo = new THREE.BoxGeometry(cardW + 0.08, cardH + 0.08, cardDepth);
-    const chassisMat = new THREE.MeshStandardMaterial({
-      color: 0x111713,
-      metalness: 0.88,
-      roughness: 0.26
-    });
-    const chassis = new THREE.Mesh(chassisGeo, chassisMat);
-    chassis.position.z = -cardDepth / 2;
-    portraitGroup.add(chassis);
-
-    // 2b. Luminous Lime Beveled Edge Rim
-    const rimEdgeGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(cardW + 0.08, cardH + 0.08, 0.01));
-    const rimEdgeMat = new THREE.LineBasicMaterial({
-      color: 0xd6fa77,
-      transparent: true,
-      opacity: 0.55
-    });
-    const rimEdges = new THREE.LineSegments(rimEdgeGeo, rimEdgeMat);
-    rimEdges.position.z = 0.005;
-    portraitGroup.add(rimEdges);
-
-    // 2c. Photo & Nameplate Mesh (Loaded from high-res asset)
-    const plateGeo = new THREE.PlaneGeometry(cardW, cardH);
-    const textureLoader = new THREE.TextureLoader();
-    
-    // Create plate texture with immediate crisp loading
-    const plateTexture = textureLoader.load(
-      'assets/sharan-card-plate.png',
-      function (tex) {
-        tex.generateMipmaps = true;
-        tex.minFilter = THREE.LinearMipmapLinearFilter;
-        tex.magFilter = THREE.LinearFilter;
-        tex.needsUpdate = true;
-      },
-      undefined,
-      function (err) {
-        // Fallback: draw dynamic canvas texture if needed
-        createCanvasFallback(plateMat);
+    // 1. Lanyard Strap (Fabric woven ribbon coming down from top)
+    const strapGeo = new THREE.PlaneGeometry(0.36, 3.4);
+    const strapCanvas = document.createElement('canvas');
+    strapCanvas.width = 128;
+    strapCanvas.height = 512;
+    const sCtx = strapCanvas.getContext('2d');
+    if (sCtx) {
+      // Dark navy/black strap matching the reel reference
+      sCtx.fillStyle = '#111827';
+      sCtx.fillRect(0, 0, 128, 512);
+      // Dual pinstripes in tech lime
+      sCtx.fillStyle = '#d6fa77';
+      sCtx.fillRect(12, 0, 6, 512);
+      sCtx.fillRect(110, 0, 6, 512);
+      // Weave pattern texture
+      sCtx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+      for (let y = 0; y < 512; y += 8) {
+        sCtx.fillRect(0, y, 128, 4);
       }
-    );
-
-    const plateMat = new THREE.MeshStandardMaterial({
-      map: plateTexture,
-      metalness: 0.0,
-      roughness: 0.85
-    });
-    const photoPlane = new THREE.Mesh(plateGeo, plateMat);
-    photoPlane.position.z = 0.008;
-    portraitGroup.add(photoPlane);
-
-    // 2d. Four Precision Corner CNC Clamps with Lime Locking Pins
-    const cornerPinMat = new THREE.MeshStandardMaterial({
-      color: 0xd6fa77,
-      metalness: 0.95,
-      roughness: 0.15
-    });
-    const cornerOffsets = [
-      [-cardW / 2 + 0.08, cardH / 2 - 0.08],
-      [cardW / 2 - 0.08, cardH / 2 - 0.08],
-      [-cardW / 2 + 0.08, -cardH / 2 + 0.08],
-      [cardW / 2 - 0.08, -cardH / 2 + 0.08]
-    ];
-    cornerOffsets.forEach(([cx, cy]) => {
-      const boltGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.04, 8);
-      const bolt = new THREE.Mesh(boltGeo, cornerPinMat);
-      bolt.position.set(cx, cy, 0.012);
-      bolt.rotation.x = Math.PI / 2;
-      portraitGroup.add(bolt);
-    });
-
-    // 3. Four Mechanical CNC Mounting Brackets / Struts
-    // Physically connects the 4 edges of the portrait frame to the surrounding ring
-    mountingGroup = new THREE.Group();
-    ringAssembly.add(mountingGroup);
-
-    const strutMat = new THREE.MeshStandardMaterial({
-      color: 0x1f2b22,
-      metalness: 0.92,
-      roughness: 0.2
-    });
-    const pinMat = new THREE.MeshStandardMaterial({
-      color: 0xd6fa77,
-      metalness: 0.95,
-      roughness: 0.15
-    });
-
-    function createStrut(len, isHorizontal) {
-      const g = new THREE.Group();
-      const shaftGeo = new THREE.CylinderGeometry(0.042, 0.042, len, 16);
-      const shaft = new THREE.Mesh(shaftGeo, strutMat);
-      g.add(shaft);
-
-      // Pivot collars at joints
-      const pinGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.14, 16);
-      const pin1 = new THREE.Mesh(pinGeo, pinMat);
-      pin1.position.y = len / 2;
-      pin1.rotation.x = Math.PI / 2;
-      g.add(pin1);
-
-      const pin2 = new THREE.Mesh(pinGeo, pinMat);
-      pin2.position.y = -len / 2;
-      pin2.rotation.x = Math.PI / 2;
-      g.add(pin2);
-
-      if (isHorizontal) {
-        g.rotation.z = Math.PI / 2;
-      }
-      return g;
     }
-
-    // Left strut: from frame left to ring inner wall
-    const hStrutLen = ringRadius - cardW / 2;
-    const leftStrut = createStrut(hStrutLen, true);
-    leftStrut.position.set(-cardW / 2 - hStrutLen / 2, 0, -cardDepth / 2);
-    mountingGroup.add(leftStrut);
-
-    // Right strut: from frame right to ring inner wall
-    const rightStrut = createStrut(hStrutLen, true);
-    rightStrut.position.set(cardW / 2 + hStrutLen / 2, 0, -cardDepth / 2);
-    mountingGroup.add(rightStrut);
-
-    // Top strut: from frame top to ring inner wall
-    const vStrutLen = ringRadius - cardH / 2;
-    const topStrut = createStrut(vStrutLen, false);
-    topStrut.position.set(0, cardH / 2 + vStrutLen / 2, -cardDepth / 2);
-    mountingGroup.add(topStrut);
-
-    // Bottom strut: from frame bottom to ring inner wall
-    const bottomStrut = createStrut(vStrutLen, false);
-    bottomStrut.position.set(0, -cardH / 2 - vStrutLen / 2, -cardDepth / 2);
-    mountingGroup.add(bottomStrut);
-
-    // 4. Secondary Background Precision Calibrated Ring (stays strictly behind the assembly)
-    const orbitalRingGeo = new THREE.TorusGeometry(2.82, 0.02, 16, 120);
-    const orbitalRingMat = new THREE.MeshStandardMaterial({
-      color: 0x6ee7b7,
-      metalness: 0.85,
-      roughness: 0.25
+    const strapTex = new THREE.CanvasTexture(strapCanvas);
+    const strapMat = new THREE.MeshStandardMaterial({
+      map: strapTex,
+      roughness: 0.85,
+      metalness: 0.05,
+      side: THREE.DoubleSide
     });
-    orbitalRing = new THREE.Mesh(orbitalRingGeo, orbitalRingMat);
-    orbitalRing.position.z = -0.35;
-    orbitalRing.userData = { name: 'GIMBAL_B: BACKGROUND_CALIBRATION_RING' };
-    sculptureGroup.add(orbitalRing);
+    const strapMesh = new THREE.Mesh(strapGeo, strapMat);
+    strapMesh.position.set(0, 3.25, -0.02);
+    lanyardGroup.add(strapMesh);
 
-    // 5. Subtle Ambient Particle Swarm
-    const particleCount = 42;
-    const particleGeo = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const basePositions = [];
+    // 2. Metallic Badge Clip & Clear Vinyl Strap Loop
+    const clipGroup = new THREE.Group();
+    clipGroup.position.set(0, 1.85, 0);
+    lanyardGroup.add(clipGroup);
 
-    for (let i = 0; i < particleCount; i++) {
-      const u = Math.random();
-      const v = Math.random();
-      const theta = u * 2.0 * Math.PI;
-      const phi = Math.acos(2.0 * v - 1.0);
-      const r = 2.0 + Math.random() * 1.5;
+    const chromeMat = new THREE.MeshStandardMaterial({
+      color: 0xf3f4f6,
+      metalness: 0.96,
+      roughness: 0.14
+    });
 
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
+    // Ring connecting strap and swivel
+    const ringGeo = new THREE.TorusGeometry(0.18, 0.038, 16, 32);
+    const ringMesh = new THREE.Mesh(ringGeo, chromeMat);
+    ringMesh.rotation.y = Math.PI / 2;
+    ringMesh.position.y = 0.22;
+    clipGroup.add(ringMesh);
 
-      positions[i * 3] = x;
-      positions[i * 3 + 1] = y;
-      positions[i * 3 + 2] = z;
+    // Main clip swivel barrel
+    const barrelGeo = new THREE.CylinderGeometry(0.11, 0.11, 0.26, 16);
+    const barrelMesh = new THREE.Mesh(barrelGeo, chromeMat);
+    barrelMesh.position.y = 0.05;
+    clipGroup.add(barrelMesh);
 
-      basePositions.push({ x, y, z, speed: 0.15 + Math.random() * 0.45 });
-    }
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    // Spring clamp jaw
+    const claspGeo = new THREE.BoxGeometry(0.32, 0.30, 0.10);
+    const claspMesh = new THREE.Mesh(claspGeo, chromeMat);
+    claspMesh.position.set(0, -0.14, 0);
+    clipGroup.add(claspMesh);
 
-    const particleMat = new THREE.PointsMaterial({
-      color: 0xd6fa77,
-      size: 0.035,
+    // Clear vinyl strap tab going through the card's slot hole
+    const tabGeo = new THREE.BoxGeometry(0.18, 0.36, 0.02);
+    const tabMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
       transparent: true,
-      opacity: 0.45
+      opacity: 0.65,
+      roughness: 0.1,
+      metalness: 0.1
     });
-    particleSystem = new THREE.Points(particleGeo, particleMat);
-    particleSystem.userData = { basePositions };
-    sculptureGroup.add(particleSystem);
+    const tabMesh = new THREE.Mesh(tabGeo, tabMat);
+    tabMesh.position.set(0, -0.32, 0.01);
+    clipGroup.add(tabMesh);
 
-    // 6. Expanding Data Pulse Rings
-    for (let i = 0; i < 2; i++) {
-      const pGeo = new THREE.RingGeometry(0.5, 0.54, 48);
-      const pMat = new THREE.MeshBasicMaterial({
-        color: 0xd6fa77,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0
-      });
-      const pMesh = new THREE.Mesh(pGeo, pMat);
-      pMesh.rotation.x = Math.PI / 2;
-      pMesh.userData = { progress: i * 0.5 };
-      sculptureGroup.add(pMesh);
-      pulseRings.push(pMesh);
-    }
+    // Metal rivet button on the clear vinyl tab
+    const rivetGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.05, 16);
+    const rivetMesh = new THREE.Mesh(rivetGeo, chromeMat);
+    rivetMesh.rotation.x = Math.PI / 2;
+    rivetMesh.position.set(0, -0.28, 0.015);
+    clipGroup.add(rivetMesh);
 
-    // Mark visual deck as three-active (activates CSS rules)
+    // 3. ID Card Body (Realistic PVC Badge)
+    cardAssembly = new THREE.Group();
+    cardAssembly.position.set(0, -0.22, 0);
+    lanyardGroup.add(cardAssembly);
+
+    const cardW = 2.45;
+    const cardH = 3.80;
+    const cardDepth = 0.036;
+
+    const cardGeo = new THREE.BoxGeometry(cardW, cardH, cardDepth);
+
+    const frontTex = createCardFrontTexture();
+    const backTex = createCardBackTexture();
+
+    // Crisp white PVC edge material
+    const edgeMat = new THREE.MeshStandardMaterial({
+      color: 0xe2e8f0,
+      metalness: 0.05,
+      roughness: 0.35
+    });
+    const frontMat = new THREE.MeshStandardMaterial({
+      map: frontTex,
+      metalness: 0.04,
+      roughness: 0.30
+    });
+    const backMat = new THREE.MeshStandardMaterial({
+      map: backTex,
+      metalness: 0.04,
+      roughness: 0.35
+    });
+
+    // BoxGeometry material mapping: [right, left, top, bottom, front (+Z), back (-Z)]
+    const cardMaterials = [edgeMat, edgeMat, edgeMat, edgeMat, frontMat, backMat];
+    const cardMesh = new THREE.Mesh(cardGeo, cardMaterials);
+    cardAssembly.add(cardMesh);
+
     if (deck) {
       deck.classList.add('three-active');
     }
 
-    // Attach Event Listeners
     setupEvents();
-
-    // Start Animation Loop
     animate(0);
   }
 
-  // Fallback 2D Canvas Generator (in case texture asset is delayed)
-  function createCanvasFallback(material) {
+  // ===========================================================================
+  // CANVAS TEXTURE GENERATOR FOR HIGH-DPI ID CARD (FRONT FACE)
+  // Matching the reference developer badge: White PVC, dark header, crisp portrait
+  // ===========================================================================
+  function createCardFrontTexture() {
+    const cw = 1024;
+    const ch = 1580;
     const offCanvas = document.createElement('canvas');
-    offCanvas.width = 1024;
-    offCanvas.height = 1250;
+    offCanvas.width = cw;
+    offCanvas.height = ch;
     const ctx = offCanvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) return new THREE.CanvasTexture(offCanvas);
 
-    ctx.fillStyle = '#0e130f';
-    ctx.fillRect(0, 0, 1024, 1250);
+    function draw() {
+      // 1. Crisp White PVC Base with subtle silver-white gradient & border
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, ch);
+      bgGrad.addColorStop(0, '#ffffff');
+      bgGrad.addColorStop(1, '#f1f5f9');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, cw, ch);
 
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = 'assets/sharan-profile.png';
-    img.onload = function () {
-      ctx.drawImage(img, 0, 0, 1024, 1030);
+      // Subtle fine security guilloche watermark pattern
+      ctx.strokeStyle = 'rgba(15, 23, 42, 0.025)';
+      ctx.lineWidth = 1;
+      for (let i = -ch; i < cw + ch; i += 32) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i + ch, ch);
+        ctx.stroke();
+      }
 
-      // Gradient transition to bottom text panel
-      const grad = ctx.createLinearGradient(0, 860, 0, 1030);
-      grad.addColorStop(0, 'rgba(14, 19, 15, 0)');
-      grad.addColorStop(1, 'rgba(14, 19, 15, 1)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 860, 1024, 170);
+      // Outer border
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(12, 12, cw - 24, ch - 24);
 
-      ctx.fillStyle = '#0e130f';
-      ctx.fillRect(0, 1030, 1024, 220);
-
-      // Line
-      ctx.strokeStyle = 'rgba(214, 250, 119, 0.4)';
-      ctx.lineWidth = 2;
+      // 2. Realistic punched slot hole at top center
+      const slotW = 160;
+      const slotH = 42;
+      const slotX = (cw - slotW) / 2;
+      const slotY = 32;
+      ctx.fillStyle = '#1e293b';
       ctx.beginPath();
-      ctx.moveTo(48, 1040);
-      ctx.lineTo(976, 1040);
+      if (ctx.roundRect) {
+        ctx.roundRect(slotX, slotY, slotW, slotH, 21);
+      } else {
+        ctx.rect(slotX, slotY, slotW, slotH);
+      }
+      ctx.fill();
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Typography
-      ctx.fillStyle = '#f0f5ee';
-      ctx.font = 'bold 44px Manrope, sans-serif';
-      ctx.fillText('SHARAN M', 48, 1105);
+      // 3. Dark Navy/Graphite Top Header Block (like the reference reel badge)
+      const headerY = 96;
+      const headerH = 82;
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(36, headerY, cw - 72, headerH, 12);
+      } else {
+        ctx.rect(36, headerY, cw - 72, headerH);
+      }
+      ctx.fill();
 
-      ctx.fillStyle = '#9aa89b';
-      ctx.font = '24px "DM Mono", monospace';
-      ctx.fillText('B.E. Mechanical Engineering · Karnataka, India', 48, 1165);
+      // Glowing active status indicator dot
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath();
+      ctx.arc(68, headerY + 41, 10, 0, Math.PI * 2);
+      ctx.fill();
 
-      const dynamicTexture = new THREE.CanvasTexture(offCanvas);
-      dynamicTexture.generateMipmaps = true;
-      dynamicTexture.minFilter = THREE.LinearMipmapLinearFilter;
-      material.map = dynamicTexture;
-      material.needsUpdate = true;
+      // Header title: "DEVELOPER ID"
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 32px "Manrope", sans-serif';
+      ctx.fillText('DEVELOPER ID', 92, headerY + 52);
+
+      // Top right badge code: "MECH · 2028"
+      ctx.fillStyle = '#d6fa77';
+      ctx.font = 'bold 24px "DM Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText('MECH // 2028', cw - 56, headerY + 52);
+      ctx.textAlign = 'left';
+
+      // 4. Portrait Photo Frame & Sharan's Photo (Dominant, clean, centered)
+      const photoX = 48;
+      const photoY = 206;
+      const photoW = cw - 96;
+      const photoH = 770;
+
+      // Photo frame background & border
+      ctx.fillStyle = '#0f172a';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(photoX, photoY, photoW, photoH, 16);
+      } else {
+        ctx.rect(photoX, photoY, photoW, photoH);
+      }
+      ctx.fill();
+
+      if (profileImageLoaded && profileImageObj) {
+        ctx.save();
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(photoX, photoY, photoW, photoH, 16);
+        } else {
+          ctx.rect(photoX, photoY, photoW, photoH);
+        }
+        ctx.clip();
+        ctx.drawImage(profileImageObj, photoX, photoY - 20, photoW, photoH + 40);
+        ctx.restore();
+      }
+
+      // Crisp frame outline
+      ctx.strokeStyle = '#94a3b8';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(photoX, photoY, photoW, photoH, 16);
+      } else {
+        ctx.rect(photoX, photoY, photoW, photoH);
+      }
+      ctx.stroke();
+
+      // Security Gold Microchip on photo corner (like high-security pass)
+      const chipX = photoX + photoW - 134;
+      const chipY = photoY + 24;
+      const chipW = 110;
+      const chipH = 80;
+      ctx.fillStyle = '#eab308';
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(chipX, chipY, chipW, chipH, 8);
+      } else {
+        ctx.rect(chipX, chipY, chipW, chipH);
+      }
+      ctx.fill();
+      ctx.strokeStyle = '#a16207';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(chipX + 36, chipY); ctx.lineTo(chipX + 36, chipY + chipH);
+      ctx.moveTo(chipX + 74, chipY); ctx.lineTo(chipX + 74, chipY + chipH);
+      ctx.moveTo(chipX, chipY + 40); ctx.lineTo(chipX + chipW, chipY + 40);
+      ctx.stroke();
+
+      // 5. Name and Credentials (High contrast, bold typography like the reel)
+      const nameY = 1055;
+      ctx.fillStyle = '#0f172a';
+      ctx.font = '900 68px "Manrope", sans-serif';
+      ctx.fillText('SHARAN M.', photoX, nameY);
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 30px "DM Mono", monospace';
+      ctx.fillText('B.E. MECHANICAL ENGINEERING', photoX, nameY + 48);
+
+      ctx.fillStyle = '#475569';
+      ctx.font = 'bold 26px "DM Mono", monospace';
+      ctx.fillText('AI SYSTEMS & PARAMETRIC DESIGN', photoX, nameY + 92);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '22px "DM Mono", monospace';
+      ctx.fillText('DSCE · BENGALURU, INDIA', photoX, nameY + 130);
+
+      // 6. Security Barcode & Holographic Verification Seal
+      const footY = 1245;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(photoX, footY);
+      ctx.lineTo(photoX + photoW, footY);
+      ctx.stroke();
+
+      // Clean dark barcode
+      const barX = photoX;
+      const barY = footY + 26;
+      const barW = photoW - 170;
+      const barH = 80;
+      ctx.fillStyle = '#0f172a';
+      const bars = [3, 1, 4, 2, 1, 3, 2, 4, 1, 2, 3, 1, 4, 2, 1, 3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3];
+      let bx = barX;
+      for (let i = 0; i < bars.length && bx < barX + barW; i++) {
+        const bw = bars[i] * 3.5;
+        ctx.fillRect(bx, barY, bw, barH);
+        bx += bw + (i % 2 === 0 ? 5 : 7);
+      }
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 22px "DM Mono", monospace';
+      ctx.fillText('ID: SM-849204-AI // SECURITY LEVEL 04', photoX, barY + barH + 34);
+
+      // Holographic Badge Seal
+      const sealX = photoX + photoW - 75;
+      const sealY = barY + 45;
+      const sGrad = ctx.createRadialGradient(sealX, sealY, 4, sealX, sealY, 56);
+      sGrad.addColorStop(0, '#d6fa77');
+      sGrad.addColorStop(0.4, '#6ee7b7');
+      sGrad.addColorStop(0.7, '#60a5fa');
+      sGrad.addColorStop(1, '#a855f7');
+      ctx.fillStyle = sGrad;
+      ctx.beginPath();
+      ctx.arc(sealX, sealY, 52, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 15px "DM Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('VERIFIED', sealX, sealY - 4);
+      ctx.fillText('INVENTOR', sealX, sealY + 16);
+      ctx.textAlign = 'left';
+
+      texture.needsUpdate = true;
+    }
+
+    const texture = new THREE.CanvasTexture(offCanvas);
+    texture.generateMipmaps = true;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+    let profileImageLoaded = false;
+    const profileImageObj = new Image();
+    profileImageObj.crossOrigin = 'anonymous';
+    profileImageObj.src = 'assets/sharan-profile.png';
+    profileImageObj.onload = () => {
+      profileImageLoaded = true;
+      draw();
     };
+
+    draw();
+    return texture;
   }
 
+  // ===========================================================================
+  // CANVAS TEXTURE GENERATOR FOR ID CARD BACK FACE
+  // ===========================================================================
+  function createCardBackTexture() {
+    const cw = 1024;
+    const ch = 1580;
+    const offCanvas = document.createElement('canvas');
+    offCanvas.width = cw;
+    offCanvas.height = ch;
+    const ctx = offCanvas.getContext('2d');
+    if (!ctx) return new THREE.CanvasTexture(offCanvas);
+
+    // Light PVC Card Back
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(0, 0, cw, ch);
+
+    // Magnetic Stripe
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(0, 140, cw, 170);
+
+    // Signature strip
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 2;
+    ctx.fillRect(60, 390, cw - 120, 100);
+    ctx.strokeRect(60, 390, cw - 120, 100);
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'italic 34px cursive, sans-serif';
+    ctx.fillText('Sharan M. // Verified Inventor', 100, 455);
+
+    // Terms & Engineering Specifications
+    ctx.fillStyle = '#475569';
+    ctx.font = 'bold 22px "DM Mono", monospace';
+    ctx.fillText('OFFICIAL CREDENTIAL · SYSTEM ACCESS AUTHORIZED', 60, 560);
+    ctx.fillText('DISCIPLINES: MECHANICAL CAD, ROS2, MULTIMODAL AI', 60, 600);
+    ctx.fillText('RAG PIPELINES, THREE.JS WEBGL EXPERIENCES', 60, 640);
+    ctx.fillText('ISSUED TO: SHARAN M · VALID: 2024 - 2028', 60, 680);
+
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(60, 760, cw - 120, 500);
+
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 24px "DM Mono", monospace';
+    ctx.fillText('[SYSTEM_VERIFICATION_MATRIX]', 90, 810);
+
+    ctx.fillStyle = '#334155';
+    ctx.font = '20px "DM Mono", monospace';
+    ctx.fillText('CORE: FULL-STACK AI & AUTONOMOUS AGENTS', 90, 860);
+    ctx.fillText('ENCRYPTION: AES-256 DOCUMENT SECURITY', 90, 900);
+    ctx.fillText('REPO: GITHUB.COM/SHARAN126', 90, 940);
+    ctx.fillText('PORTFOLIO: SHARAN126.GITHUB.IO', 90, 980);
+
+    const texture = new THREE.CanvasTexture(offCanvas);
+    texture.generateMipmaps = true;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    return texture;
+  }
+
+  // ===========================================================================
+  // RESPONSIVE SIZE & CAMERA ADAPTATION
+  // ===========================================================================
   function updateSize() {
     if (!renderer || !canvas) return;
-    const width = container.clientWidth || deck.clientWidth || 450;
-    const height = container.clientHeight || deck.clientHeight || 520;
+    const width = container.clientWidth || deck.clientWidth || 340;
+    const height = container.clientHeight || deck.clientHeight || 480;
     renderer.setSize(width, height, false);
     if (camera) {
       camera.aspect = width / height;
-      // Responsive camera distance adjustments
       if (width < 220) {
-        camera.position.z = 7.6;
+        // Compact mobile right slot
+        camera.position.z = 7.1;
       } else if (width < 480) {
-        camera.position.z = 8.2;
-      } else if (width < 768) {
-        camera.position.z = 7.8;
-      } else {
         camera.position.z = 7.2;
+      } else if (width < 768) {
+        camera.position.z = 7.0;
+      } else {
+        camera.position.z = 6.6;
       }
       camera.updateProjectionMatrix();
     }
   }
 
+  // ===========================================================================
+  // INTERACTIVE POINTER & TOUCH EVENTS
+  // ===========================================================================
   function setupEvents() {
     window.addEventListener('resize', updateSize, { passive: true });
 
-    let isHovered = false;
+    let isInteracting = false;
 
-    // Pointer move for smooth parallax
     const pointerHandler = (e) => {
       const rect = canvas.getBoundingClientRect();
       const clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0].clientX);
@@ -441,111 +541,65 @@
     activeArea.addEventListener('touchstart', pointerHandler, { passive: true });
     activeArea.addEventListener('touchmove', pointerHandler, { passive: true });
 
-    activeArea.addEventListener('mouseenter', () => { isHovered = true; });
+    activeArea.addEventListener('mouseenter', () => { isInteracting = true; });
     activeArea.addEventListener('mouseleave', () => {
-      isHovered = false;
+      isInteracting = false;
       mouse.targetX = 0;
       mouse.targetY = 0;
     });
 
-    // Scroll parallax
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      const heroHeight = window.innerHeight;
-      const factor = Math.min(scrollY / heroHeight, 1.5);
-
-      if (sculptureGroup) {
-        sculptureGroup.position.y = -factor * 0.7;
-      }
-    }, { passive: true });
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', (e) => {
+        if (e.gamma !== null && e.beta !== null) {
+          mouse.targetX = Math.max(-1, Math.min(1, e.gamma / 25));
+          mouse.targetY = Math.max(-1, Math.min(1, (e.beta - 45) / 25));
+        }
+      }, { passive: true });
+    }
   }
 
-  // Animation Loop
+  // ===========================================================================
+  // ANIMATION LOOP WITH PENDULUM SWAY & SPRING DAMPING
+  // ===========================================================================
   let lastTime = 0;
   function animate(time) {
     animationFrameId = requestAnimationFrame(animate);
 
-    const delta = (time - lastTime) * 0.001;
+    const delta = Math.min((time - lastTime) * 0.001, 0.05);
     lastTime = time;
 
-    // Smooth lerp mouse parallax
-    mouse.x += (mouse.targetX - mouse.x) * 0.06;
-    mouse.y += (mouse.targetY - mouse.y) * 0.06;
-
     const t = time * 0.001;
-    const speedMult = CREATION_CONFIG.speed * 70; // normalized speed factor
 
-    // =========================================================================
-    // UNIFIED GIMBAL MOTION:
-    // The Ring, Mounting Struts, and Portrait Frame rotate as ONE COHESIVE ASSEMBLY
-    // Gentle, elegant gyroscopic precession keeps the portrait facing the viewer
-    // while providing convincing 3D perspective and depth!
-    // =========================================================================
-    if (ringAssembly) {
-      // Harmonic 3D Precession (Yaw, Pitch, Roll)
-      const yawOsc = Math.sin(t * 0.85 * speedMult) * 0.26;    // ~15° yaw oscillation
-      const pitchOsc = Math.cos(t * 0.65 * speedMult) * 0.13;  // ~7.5° pitch oscillation
-      const rollOsc = Math.sin(t * 0.45 * speedMult) * 0.04;   // ~2.3° roll oscillation
+    // Smooth lerp for mouse/touch tilt
+    mouse.x += (mouse.targetX - mouse.x) * 0.07;
+    mouse.y += (mouse.targetY - mouse.y) * 0.07;
 
-      // Combined oscillation + interactive pointer tilt
-      const targetRotY = yawOsc + mouse.x * 0.42;
-      const targetRotX = pitchOsc - mouse.y * 0.32;
-      const targetRotZ = rollOsc + mouse.x * 0.08;
+    if (cardAssembly && lanyardGroup) {
+      // Natural pendulum sway + interactive pointer tilt
+      const ambientSwayY = Math.sin(t * 1.6) * 0.05;
+      const ambientSwayX = Math.cos(t * 1.2) * 0.025;
+      const ambientSwayZ = Math.sin(t * 1.4) * 0.035;
 
-      ringAssembly.rotation.y += (targetRotY - ringAssembly.rotation.y) * 0.08;
-      ringAssembly.rotation.x += (targetRotX - ringAssembly.rotation.x) * 0.08;
-      ringAssembly.rotation.z += (targetRotZ - ringAssembly.rotation.z) * 0.08;
+      const targetRotY = mouse.x * 0.44 + ambientSwayY;
+      const targetRotX = -mouse.y * 0.32 + ambientSwayX;
+      // Natural physical lean when dragged sideways
+      const targetRotZ = -mouse.x * 0.14 + ambientSwayZ;
 
-      // Subtle mechanical floating elevation
-      ringAssembly.position.y = Math.sin(t * 1.3) * 0.07;
+      currentRot.y += (targetRotY - currentRot.y) * 0.08;
+      currentRot.x += (targetRotX - currentRot.x) * 0.08;
+      currentRot.z += (targetRotZ - currentRot.z) * 0.08;
 
-      // Steady calibrated ring scale
-      ringAssembly.scale.setScalar(CREATION_CONFIG.ringExpansion);
+      cardAssembly.rotation.y = currentRot.y;
+      cardAssembly.rotation.x = currentRot.x;
+      cardAssembly.rotation.z = currentRot.z;
+
+      // Slight vertical floating bob
+      cardAssembly.position.y = -0.22 + Math.sin(t * 1.8) * 0.04;
     }
-
-    // Outer gear teeth revolve continuously around the main ring
-    if (gearGroup) {
-      gearGroup.rotation.z -= CREATION_CONFIG.speed * 0.8;
-    }
-
-    // Secondary background calibration ring rotates smoothly behind the assembly
-    if (orbitalRing) {
-      orbitalRing.rotation.z += CREATION_CONFIG.speed * 0.55;
-    }
-
-    // Animate Particles
-    if (particleSystem) {
-      const posAttr = particleSystem.geometry.attributes.position;
-      const positions = posAttr.array;
-      const basePos = particleSystem.userData.basePositions;
-      const spread = CREATION_CONFIG.particleSpread;
-
-      for (let i = 0; i < basePos.length; i++) {
-        const bp = basePos[i];
-        const pt = t * bp.speed;
-
-        positions[i * 3] = bp.x * spread + Math.sin(pt) * 0.1;
-        positions[i * 3 + 1] = bp.y * spread + Math.cos(pt) * 0.1;
-        positions[i * 3 + 2] = bp.z * spread + Math.sin(pt * 1.2) * 0.1;
-      }
-      posAttr.needsUpdate = true;
-    }
-
-    // Pulse Rings animation
-    pulseRings.forEach(ring => {
-      ring.userData.progress += delta * 0.4;
-      if (ring.userData.progress > 1) ring.userData.progress = 0;
-
-      const p = ring.userData.progress;
-      const scale = 0.5 + p * 4.2;
-      ring.scale.set(scale, scale, scale);
-      ring.material.opacity = Math.sin(p * Math.PI) * 0.3;
-    });
 
     renderer.render(scene, camera);
   }
 
-  // Self-start on DOM readiness
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

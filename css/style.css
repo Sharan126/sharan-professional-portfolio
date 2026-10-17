@@ -508,12 +508,12 @@ img, svg {
 }
 
 /* ==========================================================================
-   HERO RIGHT COLUMN: UNIFIED 3D MECHANICAL RING & PORTRAIT ASSEMBLY
+   HERO RIGHT COLUMN: INTERACTIVE 3D HANGING LANYARD ID BADGE
    ========================================================================== */
 .hero-visual-deck {
   position: relative;
   width: 100%;
-  min-height: 540px;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -539,7 +539,7 @@ img, svg {
   display: block;
 }
 
-/* When 3D WebGL is active, the HTML card is visually replaced by the unified 3D object while remaining accessible for screen readers & SEO */
+/* When 3D WebGL is active, the HTML card is visually replaced by the 3D ID Badge object while remaining accessible for screen readers & SEO */
 .hero-visual-deck.three-active .profile-card {
   position: absolute;
   width: 1px;
@@ -554,101 +554,132 @@ img, svg {
   pointer-events: none;
 }
 
-/* Fallback Profile Card (active if WebGL is unavailable) */
-.profile-card {
+/* Fallback Hanging Lanyard ID Badge Card (active if WebGL is unavailable) */
+.profile-card.id-badge-card {
   position: relative;
   z-index: 2;
-  width: min(340px, 100%);
-  background: rgba(14, 19, 15, 0.85);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(214, 250, 119, 0.24);
-  border-radius: 18px;
-  padding: 12px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(214, 250, 119, 0.06);
-  transition: transform 0.3s var(--transition-smooth), border-color 0.3s, box-shadow 0.3s;
+  width: min(320px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.profile-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(214, 250, 119, 0.45);
-  box-shadow: 0 30px 75px rgba(0, 0, 0, 0.85), 0 0 45px rgba(214, 250, 119, 0.12);
+
+.id-badge-strap {
+  width: 34px;
+  height: 52px;
+  background: #111827;
+  border-left: 2px solid var(--lime);
+  border-right: 2px solid var(--lime);
+  margin-bottom: -10px;
+  position: relative;
+  z-index: 1;
+}
+
+.id-badge-clip {
+  width: 38px;
+  height: 26px;
+  background: linear-gradient(180deg, #f3f4f6, #9ca3af);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 2;
+  margin-bottom: -8px;
+}
+
+.id-badge-inner {
+  width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 16px 14px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), 0 0 25px rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 3;
+}
+
+.id-badge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+.id-badge-status {
+  color: #10b981;
+  font-weight: 700;
+}
+.id-badge-tag {
+  color: var(--lime);
 }
 
 .profile-photo-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 4.7;
+  aspect-ratio: 4 / 4.4;
   border-radius: 12px;
   overflow: hidden;
-  background: #0f1622;
+  background: #0f172a;
+  border: 1px solid #94a3b8;
 }
-
 .profile-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 8%;
   display: block;
-  transition: transform 0.35s var(--transition-smooth);
-}
-.profile-card:hover .profile-photo {
-  transform: scale(1.02);
 }
 
 .profile-card-details {
-  padding: 14px 6px 4px;
+  padding: 12px 2px 8px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   text-align: left;
 }
-
 .profile-name {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--text-main);
+  color: #0f172a;
   margin: 0;
 }
-
-.profile-desc {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  margin: 0;
-  line-height: 1.45;
-}
-
-/* Unified 3D Sculpture Mode Badge docked beneath the 3D ring */
-.hero-visual-deck .sculpture-controls {
-  position: relative;
-  z-index: 3;
-  margin-top: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(11, 15, 12, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--line-strong);
-  padding: 4px;
-  border-radius: var(--radius-full);
-  box-shadow: var(--shadow-hud);
-}
-
-.state-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--lime);
-  color: #0b0f0c;
+.profile-role {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  padding: 6px 18px;
-  border-radius: var(--radius-full);
-  letter-spacing: 0.06em;
-  box-shadow: 0 0 14px var(--lime-dim);
-  user-select: none;
+  color: #059669;
+  text-transform: uppercase;
+  margin: 0;
+}
+.profile-desc {
+  font-size: 0.75rem;
+  color: #475569;
+  margin: 0;
+}
+
+.id-badge-footer {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.id-badge-barcode {
+  width: 120px;
+  height: 24px;
+  background: repeating-linear-gradient(90deg, #0f172a 0, #0f172a 2px, transparent 2px, transparent 4px, #0f172a 4px, #0f172a 7px, transparent 7px, transparent 9px);
+  opacity: 0.85;
+}
+.id-badge-code {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: #0f172a;
+  font-weight: 700;
 }
 
 /* ==========================================================================
@@ -2328,19 +2359,9 @@ img, svg {
 
   .canvas-3d-wrap {
     width: 100%;
-    height: clamp(140px, 40vw, 195px);
+    height: clamp(165px, 48vw, 220px);
     max-width: 195px;
     margin-left: auto;
-  }
-
-  .hero-visual-deck .sculpture-controls {
-    margin-top: 4px;
-    padding: 2px 6px;
-  }
-  .hero-visual-deck .state-badge {
-    font-size: 0.52rem;
-    padding: 2px 8px;
-    letter-spacing: 0.04em;
   }
 
   .profile-card {
@@ -2417,8 +2438,8 @@ img, svg {
   }
 
   .canvas-3d-wrap {
-    height: clamp(120px, 35vw, 155px);
-    max-width: 155px;
+    height: clamp(160px, 46vw, 205px);
+    max-width: 160px;
   }
 
   .hero-description {
@@ -2452,11 +2473,7 @@ img, svg {
 
   .profile-card {
     width: 100%;
-    max-width: 155px;
-  }
-  .state-badge {
-    padding: 2px 6px;
-    font-size: 0.5rem;
+    max-width: 160px;
   }
   .card-actions {
     flex-direction: column;

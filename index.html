@@ -52,12 +52,12 @@
   </style>
 
   <!-- Design System & Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=20261017-7" />
+  <link rel="stylesheet" href="css/style.css?v=20261018-idbadge3" />
 </head>
 <body>
   <!-- ThreeUI SylvaHero Scene (Full-Page 3D Background) -->
   <div id="root" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;overflow:hidden;margin:0;padding:0;border:none;background:transparent;"></div>
-  <script type="module" src="js/sylva-scene.js?v=20261017-7"></script>
+  <script type="module" src="js/sylva-scene.js?v=20261018-idbadge3"></script>
 
   <!-- HEADER & LIVE TELEMETRY -->
   <header class="header-wrap" id="siteHeader">
@@ -148,34 +148,42 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN: UNIFIED 3D MECHANICAL RING & PORTRAIT ASSEMBLY -->
-        <div class="hero-visual-deck" aria-label="Portrait of Sharan M integrated with interactive kinetic 3D mechanical ring">
-          <!-- 3D Unified Mechanical Ring & Portrait Viewport -->
-          <div class="canvas-3d-wrap" role="region" aria-label="Interactive 3D Mechanical Ring with mounted portrait of Sharan M">
+        <!-- RIGHT COLUMN: INTERACTIVE 3D HANGING LANYARD ID BADGE -->
+        <div class="hero-visual-deck" aria-label="Official Developer and Engineering ID Badge of Sharan M with hanging lanyard">
+          <!-- 3D Hanging Lanyard ID Badge Viewport -->
+          <div class="canvas-3d-wrap" role="region" aria-label="Interactive 3D Hanging Lanyard ID Badge of Sharan M">
             <canvas id="thinking-machine-canvas"></canvas>
           </div>
 
-          <!-- Simplified Profile Card -->
-          <div class="profile-card">
-            <div class="profile-photo-wrap">
-              <img 
-                src="assets/sharan-profile.png" 
-                alt="Portrait of Sharan M" 
-                class="profile-photo"
-                loading="eager"
-                width="340"
-                height="380"
-              />
+          <!-- Fallback Realistic ID Badge Card (Mirrors 3D design when WebGL is inactive) -->
+          <div class="profile-card id-badge-card">
+            <div class="id-badge-strap"></div>
+            <div class="id-badge-clip"></div>
+            <div class="id-badge-inner">
+              <div class="id-badge-header">
+                <span class="id-badge-status">● VERIFIED INVENTOR</span>
+                <span class="id-badge-tag">MECH '28 // AI</span>
+              </div>
+              <div class="profile-photo-wrap">
+                <img 
+                  src="assets/sharan-profile.png" 
+                  alt="Portrait of Sharan M" 
+                  class="profile-photo"
+                  loading="eager"
+                  width="340"
+                  height="380"
+                />
+              </div>
+              <div class="profile-card-details">
+                <h2 class="profile-name">SHARAN M.</h2>
+                <p class="profile-role">B.E. MECHANICAL ENGINEERING</p>
+                <p class="profile-desc">AI Systems & Parametric Design</p>
+              </div>
+              <div class="id-badge-footer">
+                <div class="id-badge-barcode" aria-hidden="true"></div>
+                <span class="id-badge-code">ID: SM-849204-AI</span>
+              </div>
             </div>
-            <div class="profile-card-details">
-              <h2 class="profile-name">SHARAN M</h2>
-              <p class="profile-desc">B.E. Mechanical Engineering · Karnataka, India</p>
-            </div>
-          </div>
-
-          <!-- 3D Sculpture Mode Badge -->
-          <div class="sculpture-controls" aria-label="3D Sculpture Mode: 03 // CREATION">
-            <span class="state-badge">03 // CREATION</span>
           </div>
         </div>
       </div>
@@ -1471,7 +1479,7 @@
   </script>
 
   <!-- CUSTOM SCRIPTS -->
-  <script src="js/thinking-machine.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/thinking-machine.js?v=20261018-idbadge3"></script>
+  <script src="js/app.js?v=20261018-idbadge3"></script>
 </body>
 </html>
