@@ -29,13 +29,35 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
+  <!-- Critical Immediate Styles for ThreeUI Full-Page 3D Background -->
+  <style>
+    #root,
+    #root .shader-frame,
+    #root .threeui-background,
+    #root iframe {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+      background: transparent !important;
+      display: block !important;
+    }
+  </style>
+
   <!-- Design System & Stylesheet -->
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=20261017-5" />
 </head>
 <body>
   <!-- ThreeUI SylvaHero Scene (Full-Page 3D Background) -->
-  <div id="root"></div>
-  <script type="module" src="js/sylva-scene.js"></script>
+  <div id="root" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;overflow:hidden;margin:0;padding:0;border:none;background:transparent;"></div>
+  <script type="module" src="js/sylva-scene.js?v=20261017-5"></script>
 
   <!-- HEADER & LIVE TELEMETRY -->
   <header class="header-wrap" id="siteHeader">
